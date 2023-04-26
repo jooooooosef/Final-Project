@@ -40,7 +40,7 @@ public class GameCanvas extends JComponent implements Runnable{
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.BLACK);
 
-        player1 = new Player(400,300, tileSize, 8, keyH, this);
+        player1 = new Player(480,360, tileSize, 10, keyH, this);
         map0 = new Map0(screenWidth, screenHeight, player1);
         map1 = new Map1(screenWidth, screenHeight, player1);
         indexOfMap = 0;

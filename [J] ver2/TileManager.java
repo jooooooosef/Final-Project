@@ -6,7 +6,7 @@ public class TileManager {
     
     GameCanvas gc;
     Tile[] tile;
-    int mapTileNum[][];
+    int[][] mapTileNum;
     
     public TileManager(GameCanvas gc){
         this.gc = gc;
@@ -15,67 +15,44 @@ public class TileManager {
         mapTileNum = new int [gc.numScreenTileCol][gc.numScreenTileRow];
 
         this.getTileImage();
-        this.loadMap();
+        this.loadMap("/map0Layout");
     }
 
     public void getTileImage(){
-        /* 0 : allowed to move in any direction
-         * 1 : no up movement
-         * 2 : no down movement
-         * 3 : no right movement
-         * 4 : no left movement
-         * 5 : no up & right movement
-         * 6 : no up & left movement
-         * 7 : no down & right movement
-         * 8 : no down & left movement
-        */ 
         try{
             tile[0] = new Tile();
-            tile[0].tileImage = ImageIO.read(getClass().getResourceAsStream("/g.png"));
+            tile[0].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh1.png"));
 
             tile[1] = new Tile();
-            tile[1].tileImage = ImageIO.read(getClass().getResourceAsStream("/blk.png"));
+            tile[1].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh0.png"));
             tile[1].collision = true;
 
             tile[2] = new Tile();
-            tile[2].tileImage = ImageIO.read(getClass().getResourceAsStream("/blk.png"));
+            tile[2].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh2.png"));
             tile[2].collision = true;
 
             tile[3] = new Tile();
-            tile[3].tileImage = ImageIO.read(getClass().getResourceAsStream("/blk.png"));
-            tile[3].collision = true;
+            tile[3].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh3.png"));
 
             tile[4] = new Tile();
-            tile[4].tileImage = ImageIO.read(getClass().getResourceAsStream("/blk.png"));
-            tile[4].collision = true;
+            tile[4].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh3.png"));
 
+            // GO TO MAP1
             tile[5] = new Tile();
-            tile[5].tileImage = ImageIO.read(getClass().getResourceAsStream("/b.png"));
-            tile[5].collision = true;
+            tile[5].tileImage = ImageIO.read(getClass().getResource("/g.png"));
 
+            // GO TO MAP0
             tile[6] = new Tile();
-            tile[6].tileImage = ImageIO.read(getClass().getResourceAsStream("/b.png"));
-            tile[6].collision = true;
-
-            tile[7] = new Tile();
-            tile[7].tileImage = ImageIO.read(getClass().getResourceAsStream("/b.png"));
-            tile[7].collision = true;
-
-            tile[8] = new Tile();
-            tile[8].tileImage = ImageIO.read(getClass().getResourceAsStream("/b.png"));
-            tile[8].collision = true;
-
-
-
+            tile[6].tileImage = ImageIO.read(getClass().getResource("/y.png"));
         } catch(IOException e){
             System.out.println("Image file not found in getTileImage function in TileManager class.");
         }
     }
 
-    public void loadMap(){
+    public void loadMap(String mapLayout){
 
         try{
-            InputStream is = getClass().getResourceAsStream("/map0Layout.txt");
+            InputStream is = getClass().getResourceAsStream(mapLayout + ".txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int col = 0;
@@ -128,5 +105,4 @@ public class TileManager {
             }
         }
     }
-
 }

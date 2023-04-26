@@ -95,29 +95,8 @@ public class Player implements DrawingObject{
         collisionLeft = false;
         collisionRight = false;
     }
-    
 
-    
-
-
-
-
-
-
-
-
-    public boolean isMovingToMap0(){
-        return (this.xCoordinate > 600 &&
-                this.yCoordinate < 100 );
-    }
-
-    public boolean isMovingToMap1(){
-        return (this.xCoordinate > 600 &&
-                this.yCoordinate > 450);
-    }
-
-    public void changeLocation(int x, int y){
-        this.xCoordinate = x;
+    public void changeLocation(int y){
         this.yCoordinate = y;
     }
 
