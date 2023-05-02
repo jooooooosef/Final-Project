@@ -21,18 +21,19 @@ import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 
 public class TitleScreen extends JComponent {
-    Image titleScreen;
+    BufferedImage titleScreen;
     /**
      * The constructor. This sets the size to 1024*768, and the different components are instantiated and added to the ArrayList. The Steam object and the two Kamaboko objects are made fields so as to be able to modify them.
      */
     public TitleScreen(){
         setPreferredSize(new Dimension(800, 600));
-        
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        titleScreen = kit.getImage("GOODDAY.png");
+        getTitleScreen();
     }
 
     /**
@@ -40,12 +41,18 @@ public class TitleScreen extends JComponent {
      */
     protected void paintComponent(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
-        
         RenderingHints hints = new RenderingHints(
         RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHints(hints);
-        
         g2d.drawImage(titleScreen,0, 0, this);
+    }
+
+    public void getTitleScreen(){
+        try {
+            titleScreen = ImageIO.read(getClass().getResourceAsStream("/GOODDAY.png"));
+        } catch (IOException e){
+            System.out.println("Image file(s) not found in getTitleScreen function in TitleScreen class.");
+        }
     }
 }
