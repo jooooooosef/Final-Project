@@ -6,14 +6,12 @@ public class Map0 implements DrawingObject{
     
     private int width;
     private int height;
-    private Player player1;
     private StatusBar statusBar;
     private ArrayList<MapElement> mapElements;
 
-    public Map0(int width, int height, Player player1){
+    public Map0(int width, int height){
         this.width = width;
         this.height = height;
-        this.player1 = player1;
 
         statusBar = new StatusBar(width,100);
 

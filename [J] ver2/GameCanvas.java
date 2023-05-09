@@ -5,6 +5,8 @@ import java.lang.InterruptedException;;
 
 public class GameCanvas extends JComponent implements Runnable{
 
+    private int ID;
+    
     // SCREEN DIMENSIONS
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
@@ -18,7 +20,7 @@ public class GameCanvas extends JComponent implements Runnable{
     private int FPS = 60;
 
     // COLLISIONS
-    Player player1;
+    public Player[] players = new Player[2];
     TileManager tm = new TileManager(this);
     CollisionChecker cChecker = new CollisionChecker(this);
 
@@ -36,13 +38,16 @@ public class GameCanvas extends JComponent implements Runnable{
 
     
 
-    public GameCanvas(){
+    public GameCanvas(int ID){
+        this.ID = ID;
+
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.BLACK);
 
-        player1 = new Player(480,360, tileSize, 10, keyH, this);
-        map0 = new Map0(screenWidth, screenHeight, player1);
-        map1 = new Map1(screenWidth, screenHeight, player1);
+        players[0] = new Player(480,360, tileSize, 10, keyH, this);
+        players[1] = new Player(432,328, tileSize, 10, keyH, this);
+        map0 = new Map0(screenWidth, screenHeight);
+        map1 = new Map1(screenWidth, screenHeight);
         indexOfMap = 0;
 
         gameThread = new Thread(this);
@@ -88,31 +93,19 @@ public class GameCanvas extends JComponent implements Runnable{
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHints(rh);
-
-        /* if (indexOfMap == 0)
-            map0.draw(g2d);
-        else if (indexOfMap == 1)
-            map1.draw(g2d); */
         
         tm.draw(g2d);
-        player1.draw(g2d);
+        players[0].draw(g2d);
+        players[1].draw(g2d);
         this.update();
     }
 
     private void update(){
-        player1.move();
+        players[ID].move();
     }
-
-
-
-
 
     public void changeIndexOfMap(int i){
         this.indexOfMap = i;
-    }
-
-    public Player getPlayer1(){
-        return player1;
     }
 
     public int getCurrentMap(){

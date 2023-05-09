@@ -108,6 +108,11 @@ public class Player implements DrawingObject{
         return (this.yCoordinate);
     }
 
+    public void setLocation(int x, int y){
+        xCoordinate = x;
+        yCoordinate = y;
+    }
+
     /* public int getWidth(){
         return (imageWidth);
     }

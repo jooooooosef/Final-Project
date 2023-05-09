@@ -7,11 +7,14 @@ public class GameFrame {
     private JFrame frame;
     private GameCanvas gameCanvas;
     private JPanel cp;
+    private int ID;
     
-    public GameFrame(){
+    public GameFrame(int ID){
+        this.ID = ID;
+
         frame = new JFrame();
         cp = (JPanel) frame.getContentPane();
-        gameCanvas = new GameCanvas();
+        gameCanvas = new GameCanvas(ID);
     }
 
     public void setUpGUI(){
@@ -24,7 +27,7 @@ public class GameFrame {
         frame.setVisible(true);
     }
 
-    public void changeCanvas(){
-        
-    }
+    // ACCESSOR METHODS
+
+    public GameCanvas getGameCanvas(){ return gameCanvas; }
 }

@@ -4,7 +4,6 @@ import java.awt.geom.*;
 public class Map1 implements DrawingObject{
     private int width;
     private int height;
-    private Player player1;
     private StatusBar statusBar;
     private Parking parking;
     private SOM som;
@@ -13,10 +12,9 @@ public class Map1 implements DrawingObject{
     private SkyWalkBridge0 skyWalkBridge0;
     private SkyWalkBridge1 skyWalkBridge1;
 
-    public Map1(int width, int height, Player player1){
+    public Map1(int width, int height){
         this.width = width;
         this.height = height;
-        this.player1 = player1;
         statusBar = new StatusBar(width,100);
         parking = new Parking(0,100,700,100);
         som = new SOM(50,425,250,150);
@@ -40,8 +38,6 @@ public class Map1 implements DrawingObject{
         skyWalkBridge1.draw(g2d);
 
         statusBar.draw(g2d);
-
-        player1.draw(g2d);
     }
     
 }
