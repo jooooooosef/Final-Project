@@ -11,6 +11,8 @@ public class GameServer {
 
     public GameServer(){
         System.out.println("--- GAME SERVER ---");
+        playerPositions[0] = new Vector();
+        playerPositions[1] = new Vector();
         setUpServer();
         acceptClients();
     }
@@ -33,7 +35,7 @@ public class GameServer {
                 DataOutputStream out = new DataOutputStream(sockets[clientNum].getOutputStream());
 
                 out.writeInt(clientNum);
-                playerPositions[clientNum] = new Vector();
+                // playerPositions[clientNum] = new Vector();
                 setUpReadWriteStreams(in, out, clientNum);
 
                 System.out.printf("Player %d has connected.\n", clientNum);
@@ -69,12 +71,7 @@ public class GameServer {
         @Override
         public void run(){
             while(true){
-                try {
                     readMyPlayerPosition();
-                    Thread.sleep(1);
-                } catch (InterruptedException ex){
-                    ex.printStackTrace();
-                }
             }
         }
 
@@ -97,7 +94,7 @@ public class GameServer {
         public WriteToClient(DataOutputStream out, int ID){
             this.out = out;
             this.ID = ID;
-            this.otherID = otherID;
+            otherID = ID == 0 ? 1 : 0;
         }
 
         @Override 
