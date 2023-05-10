@@ -69,7 +69,12 @@ public class GameServer {
         @Override
         public void run(){
             while(true){
-                readMyPlayerPosition();
+                try {
+                    readMyPlayerPosition();
+                    Thread.sleep(1);
+                } catch (InterruptedException ex){
+                    ex.printStackTrace();
+                }
             }
         }
 
@@ -100,7 +105,12 @@ public class GameServer {
         @Override 
         public void run(){
             while (true){
-                writeOtherPlayerPosition();
+                try {
+                    writeOtherPlayerPosition();
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 

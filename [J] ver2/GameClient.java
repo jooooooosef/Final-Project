@@ -32,12 +32,12 @@ public class GameClient {
             
             System.out.println("Succesfully connected to the main server.");
         } catch (IOException ex){
-            System.out.println("Falied to connect to the main server.");
+            System.out.println(" Failed to connect to the main server.");
             ex.printStackTrace();
         }
     }
 
-    private void setUpReadWriteThreads(DataInputStream in, DataOutputStream out){
+    private void setUpReadWriteThreads(DataInputStream in, DataOutputStream out) {
         ReadFromServer rfs = new ReadFromServer(in);
         Thread readThread = new Thread(rfs);
         readThread.start();
@@ -57,7 +57,12 @@ public class GameClient {
         @Override 
         public void run(){
             while (true){
-                readOtherPlayerPosition();
+                try {
+                    readOtherPlayerPosition();
+                    Thread.sleep(1);
+                } catch (InterruptedException ex){
+                    ex.printStackTrace();
+                }
             }
         }
 
@@ -83,7 +88,12 @@ public class GameClient {
         @Override
         public void run(){
             while (true) {
-                sendMyPositionToServer();
+                try {
+                    sendMyPositionToServer();
+                    Thread.sleep(1);
+                } catch (InterruptedException ex){
+                    ex.printStackTrace();
+                }
             }
         }
 
