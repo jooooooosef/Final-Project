@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Player implements DrawingObject{
 
+    private int ID;
     private int xCoordinate, yCoordinate;
     private int speed;
     private int tileSize;
@@ -21,7 +22,8 @@ public class Player implements DrawingObject{
     GameCanvas gameCanvas;
 
 
-    public Player(int xCoordinate, int yCoordinate, int tileSize, int speed, KeyHandler keyH, GameCanvas gameCanvas){
+    public Player(int ID, int xCoordinate, int yCoordinate, int tileSize, int speed, KeyHandler keyH, GameCanvas gameCanvas){
+        this.ID = ID;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.speed = speed;
@@ -31,19 +33,32 @@ public class Player implements DrawingObject{
         this.tileSize = tileSize;
 
         direction = "down";
-        getPlayerImage();
+        getPlayerImage(ID);
         image = null;
 
     }
 
-    public void getPlayerImage(){
-        try {
-            downImg = ImageIO.read(getClass().getResourceAsStream("/p1-0.png"));
-            upImg = ImageIO.read(getClass().getResourceAsStream("/p1-1.png"));
-            leftImg = ImageIO.read(getClass().getResourceAsStream("/p1-2.png"));
-            rightImg = ImageIO.read(getClass().getResourceAsStream("/p1-3.png"));
-        } catch (IOException e){
-            System.out.println("Image file(s) not found in getPlayerImage function in Player class.");
+    public void getPlayerImage(int ID){
+        if (ID == 0){
+            try {
+                downImg = ImageIO.read(getClass().getResourceAsStream("/p1-0.png"));
+                upImg = ImageIO.read(getClass().getResourceAsStream("/p1-1.png"));
+                leftImg = ImageIO.read(getClass().getResourceAsStream("/p1-2.png"));
+                rightImg = ImageIO.read(getClass().getResourceAsStream("/p1-3.png"));
+            } catch (IOException e){
+                System.out.println("Image file(s) not found in getPlayerImage function in Player class.");
+            }
+        }
+
+        if (ID == 1){
+            try {
+                downImg = ImageIO.read(getClass().getResourceAsStream("/p2-0.png"));
+                upImg = ImageIO.read(getClass().getResourceAsStream("/p2-1.png"));
+                leftImg = ImageIO.read(getClass().getResourceAsStream("/p2-2.png"));
+                rightImg = ImageIO.read(getClass().getResourceAsStream("/p2-3.png"));
+            } catch (IOException e){
+                System.out.println("Image file(s) not found in getPlayerImage function in Player class.");
+            }
         }
     }
 

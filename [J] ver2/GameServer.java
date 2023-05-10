@@ -82,8 +82,6 @@ public class GameServer {
             try{
                 playerPositions[ID].x = in.readInt();
                 playerPositions[ID].y = in.readInt();
-                //System.out.println(playerPositions.x);
-                //System.out.println(playerPositions.y);
             } catch(IOException ex){
                 ex.printStackTrace();
             }
@@ -118,7 +116,6 @@ public class GameServer {
             try{
                 out.writeInt(playerPositions[otherID].x);
                 out.writeInt(playerPositions[otherID].y);
-                
             } catch (IOException ex){
                 ex.printStackTrace();
             }

@@ -14,6 +14,8 @@ public class GameClient {
         System.out.println("---Connecting to Server---");
         connectToMainServer();
 
+        System.out.println(ID);
+        System.out.println(otherID);
         GameFrame gf = new GameFrame(ID);
         gf.setUpGUI();
         gc = gf.getGameCanvas();
@@ -32,7 +34,7 @@ public class GameClient {
             
             System.out.println("Succesfully connected to the main server.");
         } catch (IOException ex){
-            System.out.println(" Failed to connect to the main server.");
+            System.out.println("Failed to connect to the main server.");
             ex.printStackTrace();
         }
     }
@@ -77,6 +79,8 @@ public class GameClient {
             }
         }
     }
+
+    // all good until this line
 
     private class WriteToServer implements Runnable{
         private DataOutputStream out;
