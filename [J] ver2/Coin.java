@@ -30,7 +30,7 @@
             @Override
             public void actionPerformed(ActionEvent ae){
                 time--;
-                if(time == 4000){
+                if(time == 2000){
                     image = grayCoin;
                 }
                 else if(time == 0){
@@ -53,7 +53,7 @@
  
      @Override
      public void draw(Graphics2D g2d){
-        g2d.drawImage(image, xCoordinate, 592, 128, 128, null);
+        g2d.drawImage(image, xCoordinate, 464, 128, 128, null);
      }
  }
  
