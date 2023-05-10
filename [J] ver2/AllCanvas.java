@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.util.Random;
 
 public class AllCanvas extends JComponent implements Runnable{
     // Dimensions, FPS 
@@ -46,6 +47,10 @@ public class AllCanvas extends JComponent implements Runnable{
     //CANVAS FIELDS
     private int sceneIndex; 
 
+    //COIN MINIGAME
+    CoinScreen coinScreen;
+    Random xPosition;
+
     public AllCanvas(int w, int h){
         screenWidth = w;
         screenHeight = h;
@@ -72,22 +77,14 @@ public class AllCanvas extends JComponent implements Runnable{
 
         gameThread = new Thread(this);
         gameThread.start();
+
+        Random xPosition = new Random();
+        coinScreen = new CoinScreen(w, h);
     }
 
     @Override 
     public void run(){
         double drawInterval = 1000000000/FPS;;
-
-        /**if(sceneIndex == 0){
-            drawInterval = 1000000000/FPS;
-        }
-        else if(sceneIndex == 1){
-            drawInterval = 1000000000/FPS;
-        }
-
-        //put the rest later
-        **/
-
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         while (gameThread!= null){
@@ -147,6 +144,9 @@ public class AllCanvas extends JComponent implements Runnable{
             g2d.setPaint(Color.WHITE);
             g2d.drawString(rachel, 106, 458);
         }
+        /** else if(sceneIndex == change this to the actual screen index later on){
+            coinScreen.draw(g2d);
+        } **/
     }
 
     public void addDialogue(){
@@ -211,6 +211,9 @@ public class AllCanvas extends JComponent implements Runnable{
         }
         else if(dialogueIndex == 6){
             picIndex = 0;
+        }
+        else if(dialogueIndex == 7){
+            sceneIndex = 2;
         }
     }
 }
