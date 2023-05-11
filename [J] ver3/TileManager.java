@@ -44,6 +44,13 @@ public class TileManager {
             // GO TO MAP0
             tile[6] = new Tile();
             tile[6].tileImage = ImageIO.read(getClass().getResource("/y.png"));
+
+            // GO TO A MINIGAME
+            tile[7] = new Tile();
+            tile[7].tileImage = ImageIO.read(getClass().getResource("/sh2.png"));
+            tile[8] = new Tile();
+            tile[8].tileImage = ImageIO.read(getClass().getResource("/sh2.png"));
+
         } catch(IOException e){
             System.out.println("Image file not found in getTileImage function in TileManager class.");
         }

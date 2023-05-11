@@ -29,5 +29,5 @@ public class GameFrame {
 
     // ACCESSOR METHODS
 
-    public GameCanvas getGameCanvas(){ return gameCanvas; }
+    public GameCanvas getGameCanvas() { return gameCanvas; }
 }
