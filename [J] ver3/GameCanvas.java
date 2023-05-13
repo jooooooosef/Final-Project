@@ -1,11 +1,12 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
-import java.lang.InterruptedException;;
+import java.lang.InterruptedException;
 
 public class GameCanvas extends JComponent implements Runnable{
 
     private int ID;
+    private int otherID;
     
     // SCREEN DIMENSIONS
     final int originalTileSize = 16; // 16x16 tile
@@ -19,16 +20,26 @@ public class GameCanvas extends JComponent implements Runnable{
     // SCREEN FRAME RATE
     private int FPS = 60;
 
-    // COLLISIONS
-    public Player[] players = new Player[2];
-    TileManager tm = new TileManager(this);
-    CollisionChecker cChecker = new CollisionChecker(this);
-
     // KEYLISTENER
     private KeyHandler keyH = new KeyHandler();
 
+    // COLLISIONS
+    public Player[] players = new Player[2];
+    TileManager tm = new TileManager(this);
+    CollisionChecker cChecker = new CollisionChecker(this, keyH);
+
     // THREAD
     private Thread gameThread;
+
+    // MINIGAMES FIELDS BOOLEANS
+    private MiniGame0 mg0 = new MiniGame0();
+    private MiniGame1 mg1 = new MiniGame1();
+    private MiniGame2 mg2 = new MiniGame2();
+    private MiniGame3 mg3 = new MiniGame3();
+    private boolean playingMiniGame0 = false;
+    private boolean playingMiniGame1 = false;
+    private boolean playingMiniGame2 = false;
+    private boolean playingMiniGame3 = false;
 
     // IRRELEVANT FIELDS (AS OF NOW)
     private Map0 map0;
@@ -40,6 +51,7 @@ public class GameCanvas extends JComponent implements Runnable{
 
     public GameCanvas(int ID){
         this.ID = ID;
+        otherID = ID == 0 ? 1 : 0;
 
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.BLACK);
@@ -63,7 +75,7 @@ public class GameCanvas extends JComponent implements Runnable{
         double drawInterval = 1000000000/FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
 
-        while (gameThread!= null){
+        while (gameThread != null){
 
             this.repaint();
 
@@ -93,11 +105,24 @@ public class GameCanvas extends JComponent implements Runnable{
             RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHints(rh);
-        
-        tm.draw(g2d);
-        players[0].draw(g2d);
-        players[1].draw(g2d);
-        this.update();
+
+        if (playingMiniGame0) {
+            mg0.draw(g2d);
+        } else if (playingMiniGame1) {
+            mg1.draw(g2d);
+        } else if (playingMiniGame2) {
+            mg2.draw(g2d);
+        } else if (playingMiniGame3) {
+            mg3.draw(g2d);
+        } else {
+            tm.draw(g2d);
+            players[ID].draw(g2d);
+
+            if (players[ID].getCurrentMap() == players[otherID].getCurrentMap())
+                players[otherID].draw(g2d);
+                
+            this.update();
+        }
     }
 
     private void update(){
@@ -107,6 +132,11 @@ public class GameCanvas extends JComponent implements Runnable{
     public void changeIndexOfMap(int i){
         this.indexOfMap = i;
     }
+
+    public void playingMiniGame0(boolean tf) { playingMiniGame0 = tf; }
+    public void playingMiniGame1(boolean tf) { playingMiniGame1 = tf; }
+    public void playingMiniGame2(boolean tf) { playingMiniGame2 = tf; }
+    public void playingMiniGame3(boolean tf) { playingMiniGame3 = tf; }
 
     public int getCurrentMap(){
         return (this.indexOfMap);

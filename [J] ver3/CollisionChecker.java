@@ -1,33 +1,35 @@
 import java.lang.Math.*;
+import java.awt.*;
+import javax.swing.*;
+import java.util.*;
+import java.lang.InterruptedException;
 
 public class CollisionChecker {
 
     private GameCanvas gc;
+    private KeyHandler keyH;
 
-    public CollisionChecker(GameCanvas gc){
-       this.gc = gc;
+    public CollisionChecker(GameCanvas gc, KeyHandler kh){
+        this.gc = gc;
+        keyH = kh;
     }
 
     public void checkTile(Player player){
 
         int playerColIndex = (player.getXCoordinate())/gc.tileSize;
-        // System.out.println(playerColIndex);
         int playerNextColIndex =  (player.getXCoordinate()+gc.tileSize)/gc.tileSize;
         
         int playerRowIndex = (player.getYCoordinate())/gc.tileSize;
         int playerNextRowIndex = (player.getYCoordinate()+gc.tileSize)/gc.tileSize;
-        // System.out.println(playerRowIndex);
         
         int currentTilePos = gc.tm.mapTileNum[playerColIndex][playerRowIndex];
 
         int tilePosAfterMovingRight0 = gc.tm.mapTileNum[playerColIndex+1][playerRowIndex];
-        // System.out.println(tilePosAfterMovingRight0);
         int tilePosAfterMovingLeft0 = gc.tm.mapTileNum[playerColIndex][playerRowIndex];
         int tilePosAfterMovingUp0 = gc.tm.mapTileNum[playerColIndex][playerRowIndex];
         int tilePosAfterMovingDown0 = gc.tm.mapTileNum[playerColIndex][playerRowIndex+1];
 
         int tilePosAfterMovingRight1 = gc.tm.mapTileNum[playerColIndex+1][playerNextRowIndex];
-        // System.out.println(tilePosAfterMovingRight1);
         int tilePosAfterMovingLeft1 = gc.tm.mapTileNum[playerColIndex][playerNextRowIndex];
         int tilePosAfterMovingUp1 = gc.tm.mapTileNum[playerNextColIndex][playerRowIndex];
         int tilePosAfterMovingDown1 = gc.tm.mapTileNum[playerNextColIndex][playerRowIndex+1];
@@ -55,16 +57,30 @@ public class CollisionChecker {
         if(tilePosAfterMovingDown0 == 5){
             gc.tm.loadMap("/map1Layout");
             player.changeLocation(5*gc.tileSize);
+            player.changeCurrentMap(1);
         }
 
         if(tilePosAfterMovingUp0 == 6){
             gc.tm.loadMap("/map0Layout");
             player.changeLocation(12*gc.tileSize);
+            player.changeCurrentMap(0);
         } 
 
+        if((tilePosAfterMovingUp0 == 7) && (keyH.spacePressed == true)){
+            gc.playingMiniGame0(true);
+        }
 
+        if((tilePosAfterMovingUp0 == 8) && (keyH.spacePressed == true)){
+            gc.playingMiniGame1(true);
+        }
 
-        
+        if((tilePosAfterMovingDown0 == 7) && (keyH.spacePressed == true)){
+            gc.playingMiniGame2(true);
+        }
+
+        if((tilePosAfterMovingDown0 == 8) && (keyH.spacePressed == true)){
+            gc.playingMiniGame3(true);
+        }
 
     }
 }

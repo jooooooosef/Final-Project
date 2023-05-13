@@ -18,9 +18,10 @@ public class Player implements DrawingObject{
     private BufferedImage downImg, upImg, leftImg, rightImg;
     private BufferedImage image;
     private KeyHandler keyH;
+    private int currentMap;
+
     boolean collisionUp, collisionDown, collisionRight, collisionLeft = false;
     GameCanvas gameCanvas;
-
 
     public Player(int ID, int xCoordinate, int yCoordinate, int tileSize, int speed, KeyHandler keyH, GameCanvas gameCanvas){
         this.ID = ID;
@@ -29,6 +30,7 @@ public class Player implements DrawingObject{
         this.speed = speed;
         this.keyH = keyH;
         this.gameCanvas = gameCanvas;
+        currentMap = 0;
 
         this.tileSize = tileSize;
 
@@ -128,11 +130,9 @@ public class Player implements DrawingObject{
         yCoordinate = y;
     }
 
-    /* public int getWidth(){
-        return (imageWidth);
+    public void changeCurrentMap(int i){
+        currentMap = i;
     }
 
-    public int getHeight(){
-        return (imageHeight);
-    } */
+    public int getCurrentMap() { return currentMap; }
 }
