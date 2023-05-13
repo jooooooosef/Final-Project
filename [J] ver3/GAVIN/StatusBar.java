@@ -21,7 +21,7 @@ public class StatusBar implements DrawingObject{
         Rectangle2D.Double statusBarBase = new Rectangle2D.Double(0,0,width,height); 
         g2d.setColor(Color.decode("#003466"));
         g2d.fill(statusBarBase);
-        g2d.drawImage(gameLogo, 435, 45, 90, 90, null);
+        g2d.drawImage(gameLogo, 390, -22, 180, 135, null);
     }
 
     public void getGameLogo(){
