@@ -11,6 +11,7 @@ public class Orsem implements DrawingObject {
     private Rectangle2D.Double background, display, displayText,tntName;
     private ArrayList<dialogueText> dialogue;
     private ArrayList<BufferedImage> images;
+    private ArrayList<ArrayList<Rectangle2D.Double>> chequered;
     private int picIndex, dialogueIndex, screenWidth, screenHeight; 
     private String rachel;
 
@@ -32,6 +33,8 @@ public class Orsem implements DrawingObject {
         addDialogue();
 
         background = new Rectangle2D.Double(0, 0, screenWidth, screenHeight);
+        chequered = new ArrayList<ArrayList<Rectangle2D.Double>>();
+        addSquares();
         display = new Rectangle2D.Double(50, 50, 860, 350);
         displayText = new Rectangle2D.Double(80, 435, 800, 250);
         tntName = new Rectangle2D.Double(90, 425, 150, 40);
@@ -45,6 +48,14 @@ public class Orsem implements DrawingObject {
         g2d.setColor(Color.decode("#abdbe3"));
         g2d.fill(background);
         g2d.draw(background);
+
+        g2d.setColor(Color.decode("#a4b8c5"));
+        for(ArrayList<Rectangle2D.Double> f : chequered){
+            for(Rectangle2D.Double g : f){
+                g2d.fill(g);
+                g2d.draw(g);
+            }
+        }
 
         g2d.setColor(Color.decode("#eab676"));
         g2d.fill(display);
@@ -89,7 +100,7 @@ public class Orsem implements DrawingObject {
     }
 
     public void changeDialogue(){
-        if(keyB.spaceKeyPressed){
+        if(keyB.enterKeyPressed){
             if(dialogueIndex < 6){
                 dialogueIndex ++;
                 try {
@@ -110,7 +121,7 @@ public class Orsem implements DrawingObject {
                 picIndex = 0;
                 rachel = "??????";
             }
-            keyB.spaceKeyPressed = false;
+            keyB.enterKeyPressed = false;
         }
         else if(dialogueIndex == 2){
             rachel = "Rachel";
@@ -126,6 +137,21 @@ public class Orsem implements DrawingObject {
         }
         else if(dialogueIndex == 6){
             picIndex = 0;
+        }
+    }
+
+    public void addSquares(){
+        for(int i = 0; i < 12; i++){
+           chequered.add(new ArrayList<Rectangle2D.Double>());
+        }
+
+        for(int j = 0; j < 12; j+=2){
+            for(int k = 0; k < 12; k++){
+                chequered.get(j).add(new Rectangle2D.Double(40+(160*k), 0+(160*(j/2)), 80, 80));
+            }
+            for(int l = 0; l < 12; l++){
+                chequered.get(j+1).add(new Rectangle2D.Double(-40+(160*l), 80+(160*(j/2)), 80, 80));
+            }
         }
     }
     

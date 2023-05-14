@@ -5,26 +5,26 @@ import javax.imageio.ImageIO;
 import java.awt.geom.*;
 import java.util.ArrayList;
 
-public class Orsem implements DrawingObject {
-    BufferedImage orsemIntro, horacio, ctcsom, leong;
+public class Graduation implements DrawingObject {
+    BufferedImage grad1, grad2, grad3;
 
-    private Rectangle2D.Double background, display, displayText, tntName;
+    private Rectangle2D.Double background, display, displayText,tntName;
     private ArrayList<dialogueText> dialogue;
     private ArrayList<BufferedImage> images;
     private ArrayList<ArrayList<Rectangle2D.Double>> chequered;
     private int picIndex, dialogueIndex, screenWidth, screenHeight; 
     private String rachel;
 
-    private KeyHandler key;
+    private KeyBindings keyB;
     private Thread gameThread;
-    private AllCanvas allCanvas;
+    private GameCanvas gc;
 
-    public Orsem(AllCanvas ac){
-        allCanvas = ac;
-        key = ac.giveKeyHandler();
-        gameThread = ac.giveThread();
-        screenWidth = ac.giveScreenWidth();
-        screenHeight = ac.giveScreenHeight();
+    public Graduation(GameCanvas gc){
+        this.gc = gc;
+        keyB = gc.getKeyBindings();
+        gameThread = gc.getGameThread();
+        screenWidth = gc.screenWidth;
+        screenHeight = gc.screenHeight;
 
         images = new ArrayList<BufferedImage>();
         addImages();
@@ -41,14 +41,14 @@ public class Orsem implements DrawingObject {
         
         picIndex = 0;
         dialogueIndex = 0;
-        rachel = "?????";
+        rachel = "Rachel";
     }
 
     public void draw(Graphics2D g2d){
         g2d.setColor(Color.decode("#abdbe3"));
         g2d.fill(background);
         g2d.draw(background);
-        
+
         g2d.setColor(Color.decode("#a4b8c5"));
         for(ArrayList<Rectangle2D.Double> f : chequered){
             for(Rectangle2D.Double g : f){
@@ -75,7 +75,7 @@ public class Orsem implements DrawingObject {
     }
 
     public void addDialogue(){
-        dialogue.add(new dialogueText("Welcome to the Ateneo!", "We're so excited to finally have you here,", "and we hope you enjoy your stay.", ""));
+        dialogue.add(new dialogueText("Congrats, Atenista! You finally reached the end!", "After finishing all four school years,", "you're finally graduating!", ""));
         dialogue.add(new dialogueText("I'll be your OrSem TNT for today.", "I'll walk you through some buildings,", "and go a little bit into what they're for.", "Name's Rachel, by the way!"));
         dialogue.add(new dialogueText("Let's go up the skywalk first.", "", "", ""));
         dialogue.add(new dialogueText("Over here are the CTC and SOM buildings!", "They're both connected by a bridge,", "making it easy to go back and forth", "between the two."));
@@ -86,31 +86,30 @@ public class Orsem implements DrawingObject {
 
     public void addImages(){
         try {
-            orsemIntro = ImageIO.read(getClass().getResourceAsStream("/orsem.jpg"));
-            horacio = ImageIO.read(getClass().getResourceAsStream("/dlcosta.jfif"));
-            ctcsom = ImageIO.read(getClass().getResourceAsStream("/ctcsom.jpg"));
-            leong = ImageIO.read(getClass().getResourceAsStream("/leong.jpg"));
-            images.add(orsemIntro);
-            images.add(ctcsom);
-            images.add(horacio);
-            images.add(leong);
+            grad1 = ImageIO.read(getClass().getResourceAsStream("images/grad1.jpg"));
+            grad2 = ImageIO.read(getClass().getResourceAsStream("images/grad2.jfif"));
+            grad3 = ImageIO.read(getClass().getResourceAsStream("images/grad3.jpg"));
+            images.add(grad1);
+            images.add(grad2);
+            images.add(grad3);
         } catch (IOException e){
             System.out.println("Image file(s) not found in addImages function in Orsem class.");
         }
     }
 
     public void changeDialogue(){
-        if(key.spacePressed){
-            if(dialogueIndex < 6){
-                dialogueIndex ++;
+        if(keyB.enterKeyPressed){
+            if(dialogueIndex < dialogue.size()){
+                dialogueIndex++;
+                picIndex++;
                 try {
                     gameThread.sleep(100);
                 } catch(InterruptedException e){
                     e.printStackTrace();
                 }
             }
-            else if(dialogueIndex == 6){
-                allCanvas.updateSceneIndex();
+            else if(dialogueIndex == dialogue.size()-1){
+                gc.inGrad(false);
                 try {
                     gameThread.sleep(100);
                 } catch(InterruptedException e){
@@ -118,23 +117,8 @@ public class Orsem implements DrawingObject {
                 }
                 dialogueIndex = 0;
                 picIndex = 0;
-                rachel = "??????";
             }
-        }
-        else if(dialogueIndex == 2){
-            rachel = "Rachel";
-        }
-        else if(dialogueIndex == 3){
-            picIndex = 1;
-        }
-        else if(dialogueIndex == 4){
-            picIndex = 2; 
-        }
-        else if(dialogueIndex == 5){
-            picIndex = 3;
-        }
-        else if(dialogueIndex == 6){
-            picIndex = 0;
+            keyB.enterKeyPressed = false;
         }
     }
 

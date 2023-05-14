@@ -1,7 +1,3 @@
-/* 
- * The clock should probably have an internal timer, and a position (implement the Random somewhere else probably)
- */
-
  import java.awt.*;
  import java.awt.event.*;
  import java.awt.image.BufferedImage;
