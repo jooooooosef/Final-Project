@@ -21,12 +21,12 @@ public class StatusBar implements DrawingObject{
         Rectangle2D.Double statusBarBase = new Rectangle2D.Double(0,0,width,height); 
         g2d.setColor(Color.decode("#003466"));
         g2d.fill(statusBarBase);
-        g2d.drawImage(gameLogo, 435, 45, 90, 90, null);
+        g2d.drawImage(gameLogo, 380, -35, 200, 200, null);
     }
 
     public void getGameLogo(){
         try {
-            gameLogo = ImageIO.read(getClass().getResourceAsStream("/logo.png"));
+            gameLogo = ImageIO.read(getClass().getResourceAsStream("images/logo.png"));
         } catch (IOException e){
             System.out.println("Image file(s) not found in getCoinImage function in Player class.");
         }

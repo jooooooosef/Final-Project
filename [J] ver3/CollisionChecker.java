@@ -56,18 +56,20 @@ public class CollisionChecker {
 
         if(tilePosAfterMovingDown0 == 5){
             gc.tm.loadMap("/map1Layout");
-            player.changeLocation(5*gc.tileSize);
+            player.changeYLocation(5*gc.tileSize);
             player.changeCurrentMap(1);
+            player.gameCanvas.changeIndexOfMap(1);
         }
 
         if(tilePosAfterMovingUp0 == 6){
             gc.tm.loadMap("/map0Layout");
-            player.changeLocation(12*gc.tileSize);
+            player.changeYLocation(12*gc.tileSize);
             player.changeCurrentMap(0);
+            player.gameCanvas.changeIndexOfMap(0);
         } 
 
         if((tilePosAfterMovingUp0 == 7) && (keyH.spacePressed == true)){
-            gc.playingMiniGame0(true);
+            gc.playingRunningGame(true);
         }
 
         if((tilePosAfterMovingUp0 == 8) && (keyH.spacePressed == true)){
@@ -79,7 +81,7 @@ public class CollisionChecker {
         }
 
         if((tilePosAfterMovingDown0 == 8) && (keyH.spacePressed == true)){
-            gc.playingMiniGame3(true);
+            gc.playingCoinGame(true);
         }
 
     }

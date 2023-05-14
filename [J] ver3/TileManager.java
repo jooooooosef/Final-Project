@@ -21,29 +21,29 @@ public class TileManager {
     public void getTileImage(){
         try{
             tile[0] = new Tile();
-            tile[0].tileImage = ImageIO.read(getClass().getResourceAsStream("/grasstile.png"));
+            tile[0].tileImage = ImageIO.read(getClass().getResourceAsStream("images/grasstile.png"));
 
             tile[1] = new Tile();
             tile[1].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh0.png"));
             tile[1].collision = true;
 
             tile[2] = new Tile();
-            tile[2].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh2.png"));
+            tile[2].tileImage = ImageIO.read(getClass().getResourceAsStream("images/road32.png"));
             tile[2].collision = true;
 
             tile[3] = new Tile();
-            tile[3].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh3.png"));
+            tile[3].tileImage = ImageIO.read(getClass().getResourceAsStream("images/grasstile.png"));
 
             tile[4] = new Tile();
-            tile[4].tileImage = ImageIO.read(getClass().getResourceAsStream("/sh3.png"));
+            tile[4].tileImage = ImageIO.read(getClass().getResourceAsStream("images/bridgeout32.png"));
 
             // GO TO MAP1
             tile[5] = new Tile();
-            tile[5].tileImage = ImageIO.read(getClass().getResource("/g.png"));
+            tile[5].tileImage = ImageIO.read(getClass().getResource("images/grasstile.png"));
 
             // GO TO MAP0
             tile[6] = new Tile();
-            tile[6].tileImage = ImageIO.read(getClass().getResource("/y.png"));
+            tile[6].tileImage = ImageIO.read(getClass().getResource("images/grasstile.png"));
 
             // GO TO A MINIGAME
             tile[7] = new Tile();
@@ -52,7 +52,7 @@ public class TileManager {
             tile[8].tileImage = ImageIO.read(getClass().getResource("/sh2.png"));
 
         } catch(IOException e){
-            System.out.println("Image file not found in getTileImage function in TileManager class.");
+            System.out.println("Image file(s) not found in getTileImage function in TileManager class.");
         }
     }
 

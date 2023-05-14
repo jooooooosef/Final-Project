@@ -1,45 +1,36 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 public class Map1 implements DrawingObject{
-    private int width;
-    private int height;
-    private StatusBar statusBar;
-    private Parking parking;
-    private SOM som;
-    private CTC ctc;
-    private SkyWalk skywalk;
-    private SkyWalkBridge0 skyWalkBridge0;
-    private SkyWalkBridge1 skyWalkBridge1;
-
-    public Map1(int width, int height){
-        this.width = width;
-        this.height = height;
-        statusBar = new StatusBar(width,100);
-        parking = new Parking(0,100,700,100);
-        som = new SOM(50,425,250,150);
-        ctc = new CTC(350,425,250,150);
-        skywalk = new SkyWalk(0,250,650,130);
-        skyWalkBridge0 = new SkyWalkBridge0(112,380,125,45);
-        skyWalkBridge1 = new SkyWalkBridge1(412,380,125,45);
-    }
-
-    @Override
-    public void draw(Graphics2D g2d){
-        Rectangle2D.Double background = new Rectangle2D.Double(0,0,width,height);
-        g2d.setColor(Color.MAGENTA);
-        g2d.fill(background);
-        
-        som.draw(g2d);
-        ctc.draw(g2d);
-        parking.draw(g2d);
-        skywalk.draw(g2d);
-        skyWalkBridge0.draw(g2d);
-        skyWalkBridge1.draw(g2d);
-
-        statusBar.draw(g2d);
-    }
     
+    private BufferedImage ctc;
+    private BufferedImage som;
+
+    public Map1(){
+        try{
+        ctc = ImageIO.read(getClass().getResourceAsStream("images/ctcsom63.png"));
+        som = ImageIO.read(getClass().getResourceAsStream("images/ctcsom63.png"));
+        } catch (IOException ex) {
+            System.out.println("Image file(s) not found in constructor of Map0");
+        }
+    }
+
+    @Override 
+    public void draw(Graphics2D g2d){
+        // values were hard-coded
+
+        double doubleSomWidth = som.getWidth()*1.94;
+        int intSomWidth = (int) doubleSomWidth;
+        double doubleSomHeight = som.getHeight()*1.69;
+        int intSomHeight = (int) doubleSomHeight;
+        
+
+        g2d.drawImage(som, 18, 528, intSomWidth, intSomHeight, null);
+        g2d.drawImage(ctc, 402, 528, intSomWidth, intSomHeight, null);
+       
+    }
 }
-
-

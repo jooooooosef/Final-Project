@@ -27,10 +27,12 @@ public class GameClient {
     private void setUpGUI(){
         GameFrame gf = new GameFrame(ID);
         gf.setUpGUI();
-        GameCanvas gc = gf.getGameCanvas();
+        GameCanvas gc = gf.getGameCanvas(
+        );
 
         PlayerPositionManager ppm = new PlayerPositionManager(ID, in, out, gc);
-        ppm.run();
+        Thread ppmThread = new Thread(ppm);
+        ppmThread.start();
     }
 
 }

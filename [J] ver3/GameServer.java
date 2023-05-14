@@ -31,6 +31,7 @@ public class GameServer{
         }
 
         PlayerPositionManager ppm = new PlayerPositionManager(inClient0, inClient1, outClient0, outClient1);
-        ppm.run();
+        Thread ppmThread = new Thread(ppm);
+        ppmThread.start();
     }
 }

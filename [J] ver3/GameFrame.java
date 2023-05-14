@@ -8,6 +8,7 @@ public class GameFrame {
     private GameCanvas gameCanvas;
     private JPanel cp;
     private int ID;
+    private KeyBindings keyB;
     
     public GameFrame(int ID){
         this.ID = ID;
@@ -28,6 +29,6 @@ public class GameFrame {
     }
 
     // ACCESSOR METHODS
-
     public GameCanvas getGameCanvas() { return gameCanvas; }
+    public JPanel getContentPane() { return cp; }
 }

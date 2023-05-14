@@ -86,7 +86,6 @@ public class GameFrame {
                         gameCanvas.getPlayer1().changeLocation(gameCanvas.getPlayer1().getXCoordinate(),150);
                     gameCanvas.changeIndexOfMap(1);
                 }
-
                 gameCanvas.repaint();
                 
             }
@@ -119,9 +118,9 @@ public class GameFrame {
         am.put("down", moveDown);
         am.put("left", moveLeft);
         am.put("right", moveRight);
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W,0,false), "up");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S,0,false), "down");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A,0,false), "left");
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D,0,false), "right");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W,0,true), "up");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S,0,true), "down");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A,0,true), "left");
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_D,0,true), "right");
     }
 }
