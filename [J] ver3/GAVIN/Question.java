@@ -19,24 +19,27 @@ of my program.
 import java.awt.*;
 import java.util.ArrayList;
 
-public class dialogueText implements DrawingObject {
+public class Question implements DrawingObject {
     private int x; 
     private int y; 
     private int size;
-    private ArrayList<String> dialogues; 
+    private ArrayList<String> dialogues;
+    String correctAnswer; 
 
     /**
      * The constructor. This takes the coordinates for the text, as well as an integer for the font size.
      */
-    public dialogueText(String a, String b, String c, String d){
+    public Question(String a, String b, String c, String d, String e, String f){
         this.x = 95;
-        this.y = 505;
+        this.y = 155;
         size = 34;
         dialogues = new ArrayList<String>();
         dialogues.add(a);
         dialogues.add(b);
         dialogues.add(c);
         dialogues.add(d);
+        dialogues.add(e);
+        correctAnswer = f;
     }
 
     /**
@@ -46,10 +49,14 @@ public class dialogueText implements DrawingObject {
      */
     public void draw(Graphics2D g2d){
         g2d.setFont(new Font("SansSerif", Font.BOLD + Font.ITALIC, size));
-        g2d.setPaint(Color.decode("#48718a"));
+        g2d.setPaint(Color.decode("#d6dacf"));
         int lineHeight = g2d.getFontMetrics().getHeight();
         for(int t = 0; t < dialogues.size(); t++){
             g2d.drawString(dialogues.get(t), x, y + lineHeight*t);
         }
+    }
+
+    public String getCorrectAnswer(){
+        return correctAnswer;
     }
 }

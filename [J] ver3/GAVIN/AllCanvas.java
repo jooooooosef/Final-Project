@@ -1,17 +1,5 @@
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
-import java.io.*;
-import java.io.File;
-import java.io.IOException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JComponent;
-import java.util.ArrayList;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 
 public class AllCanvas extends JComponent implements Runnable{
     // Dimensions, FPS 
@@ -30,6 +18,8 @@ public class AllCanvas extends JComponent implements Runnable{
     public TitleScreen titleScreen;
     public Orsem orsem;
     public CoinGame SOM;
+    public HoracioQuiz HOR;
+    public LeongQuiz LEO;
     Player player;
 
     //Put StatusBar in your allCanvas, then communicate with the minigames
@@ -45,6 +35,8 @@ public class AllCanvas extends JComponent implements Runnable{
         titleScreen = new TitleScreen(this);
         orsem = new Orsem(this);
         SOM = new CoinGame(this);
+        HOR = new HoracioQuiz(this);
+        LEO = new LeongQuiz(this);
 
         gameThread = new Thread(this);
         gameThread.start();
@@ -65,7 +57,7 @@ public class AllCanvas extends JComponent implements Runnable{
             else if(sceneIndex == 1){
                 orsem.changeDialogue();
             }
-            else if(sceneIndex == 2){
+            /** else if(sceneIndex == 2){
                 if(SOM.giveGameIndex() == 0){
                     SOM.gameStart();
                 }
@@ -75,7 +67,23 @@ public class AllCanvas extends JComponent implements Runnable{
                 else if(SOM.giveGameIndex() == 2){
                     SOM.gameEnd();
                 }  
+            } **/
+
+            else if(sceneIndex == 2){
+                if(LEO.giveGameIndex() == 0){
+                    LEO.gameStart();
+                }
+                else if(LEO.giveGameIndex() == 1){
+                    LEO.quizGame();
+                }
+                else if(LEO.giveGameIndex() == 2){
+                    LEO.checked();
+                }  
+                else if(LEO.giveGameIndex() == 3){
+                    LEO.gameEnd();
+                }  
             }
+
             this.repaint();
 
             try {
@@ -111,7 +119,7 @@ public class AllCanvas extends JComponent implements Runnable{
             orsem.draw(g2d);
         }
         else if(sceneIndex == 2){
-            SOM.draw(g2d);
+            LEO.draw(g2d);
         }
     }
 

@@ -3,34 +3,29 @@
  */
 
  import java.awt.*;
- import java.awt.event.*;
  import java.awt.image.BufferedImage;
- import java.io.*;
  import javax.imageio.ImageIO;
  import java.awt.event.ActionEvent;
  import java.awt.event.ActionListener;
  import javax.swing.*;
  import java.io.IOException;
- import java.util.Random;
  import java.util.concurrent.ThreadLocalRandom;
 
  
  public class Coin implements DrawingObject{
  
-     private int xCoordinate, yCoordinate, width, height;
+     private int xCoordinate, yCoordinate, size;
      private int time;
      private BufferedImage blueCoin, grayCoin, image;
      private String status;
      AllCanvas allCanvas;
-     boolean collisionRight, collisionLeft = false;
      Timer coinTimer;
  
      public Coin(AllCanvas ac){
         allCanvas = ac;
         xCoordinate = ThreadLocalRandom.current().nextInt(0, ac.giveScreenWidth() - 95);
         yCoordinate = ThreadLocalRandom.current().nextInt(228, (ac.giveScreenHeight() - 128 - 95));
-        width = 96;
-        height = 96;
+        size = 96;
         time = 3;
         status = "full";
 
@@ -59,13 +54,13 @@
              blueCoin = ImageIO.read(getClass().getResourceAsStream("/bCoin.png"));
              grayCoin = ImageIO.read(getClass().getResourceAsStream("/gCoin.png"));
          } catch (IOException e){
-             System.out.println("Image file(s) not found in getCoinImage function in Player class.");
+             System.out.println("Image file(s) not found in getCoinImage function in Coin class.");
          }
      }
  
      @Override
      public void draw(Graphics2D g2d){
-        g2d.drawImage(image, xCoordinate, yCoordinate, width, height, null);
+        g2d.drawImage(image, xCoordinate, yCoordinate, size, size, null);
      }
      
     public int getXCoordinate(){
@@ -81,9 +76,9 @@
     }
     
     public boolean collisionCheck(Player p){
-        return!( this.xCoordinate + this.width <= p.getXCoordinate() ||
+        return!( this.xCoordinate + this.size <= p.getXCoordinate() ||
                  this.xCoordinate >= p.getXCoordinate() + 100 ||
-                 this.yCoordinate + this.height <= p.getYCoordinate() || 
+                 this.yCoordinate + this.size <= p.getYCoordinate() || 
                  this.yCoordinate >= p.getYCoordinate() + 100 );
     }
 

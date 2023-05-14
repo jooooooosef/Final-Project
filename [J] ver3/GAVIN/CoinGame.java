@@ -1,11 +1,7 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.util.ArrayList;
 
@@ -14,7 +10,6 @@ public class CoinGame implements DrawingObject {
     private Thread gameThread;
     private int screenWidth, screenHeight, time, coinIndex, gameFlowIndex;
     private double score;
-    private Boolean spawnAgain = false;
     ArrayList<Coin> coins;
     AllCanvas allCanvas;
     CoinScreen coinScreen;
@@ -147,8 +142,12 @@ public class CoinGame implements DrawingObject {
             } catch(InterruptedException e){
                 e.printStackTrace();
             }
+            coinIndex = 0;
             gameFlowIndex = 0;
+            score = 0;
             time = 60;
+            coins.clear();
+            coins.add(new Coin(allCanvas));
         }
     }
 }
