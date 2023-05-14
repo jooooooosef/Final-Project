@@ -1,8 +1,15 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.TreeUI;
 import java.lang.InterruptedException;
 
-public class GameCanvas extends JComponent implements Runnable{
+public class GameCanvas extends JComponent implements Runnable, ActionListener{
 
     // PLAYER IDENTIFICATION
     private int ID;
@@ -22,6 +29,10 @@ public class GameCanvas extends JComponent implements Runnable{
 
     // GRAPHICS 
     private StatusBar statusBar = new StatusBar(960,144);
+    private dialogueText buildingOccupiedText = new dialogueText("Oops! Teka lang, Atenista!", "This building is currently being played.", "Please wait for them to finish or try visiting", "other buildings. Press enter to go back.");
+    private Rectangle2D.Double displayText = new Rectangle2D.Double(80, 435, 800, 250);
+    private Rectangle2D.Double tntName = new Rectangle2D.Double(90, 425, 150, 40);
+    private BufferedImage buildingOccupiedBackground;
 
     // KEYLISTENER
     private KeyHandler keyH = new KeyHandler();
@@ -36,18 +47,21 @@ public class GameCanvas extends JComponent implements Runnable{
     private Thread gameThread;
 
     // MINIGAMES FIELDS BOOLEANS
+    private LeongQuiz leongQuiz;
+    private HoracioQuiz horacioQuiz;
     private RunningGame runningGame;
-    private MiniGame1 mg1 = new MiniGame1();
-    private MiniGame2 mg2 = new MiniGame2();
     private CoinGame coinGame;
+    private boolean playingLeongQuiz = false;
+    private boolean playingHoracioQuiz = false;
     private boolean playingRunningGame = false;
-    private boolean playingMiniGame1 = false;
-    private boolean playingMiniGame2 = false;
     private boolean playingCoinGame = false;
     private boolean otherPlayerIsPlaying0 = false;
     private boolean otherPlayerIsPlaying1 = false;
     private boolean otherPlayerIsPlaying2 = false;
     private boolean otherPlayerIsPlaying3 = false;
+    private boolean buildingOccupied = false;
+    private boolean[] gameDone;
+
 
     // GAMEFLOW FIELDS
     private TitleScreen titleS = new TitleScreen(this);
@@ -55,13 +69,16 @@ public class GameCanvas extends JComponent implements Runnable{
     private boolean inTitleScreen = true;       // START
     private boolean inOrsem = false;
 
-    // IRRELEVANT FIELDS (AS OF NOW)
+    // TIMER-RELATED FIELDS
+    private Timer timer;
+    private int seconds = 59;
+    private int minutes = 9;
+
+    // OTHER FIELDS
     private Map0 map0;
     private Map1 map1;
     private int indexOfMap;
-
     
-
     public GameCanvas(int ID){
         this.ID = ID;
         otherID = ID == 0 ? 1 : 0;
@@ -74,16 +91,32 @@ public class GameCanvas extends JComponent implements Runnable{
         map0 = new Map0();
         map1 = new Map1();
         indexOfMap = 0;
+        timer = new Timer(1000, this);
+
+        gameDone = new boolean[4];
+        gameDone[0] = false;
+        gameDone[1] = false;
+        gameDone[2] = false;
+        gameDone[3] = false;
 
         // MINIGAMES
         runningGame = new RunningGame(players[ID], this);
         coinGame = new CoinGame(players[ID], this);
+        horacioQuiz = new HoracioQuiz(this);
+        leongQuiz = new LeongQuiz(this);
 
         gameThread = new Thread(this);
         gameThread.start();
 
         this.addKeyListener(keyH);
         this.setFocusable(true);
+
+        // RETRIEVAL OF IMAGE
+        try {
+            buildingOccupiedBackground = ImageIO.read(getClass().getResourceAsStream("images/tekalang.png"));
+        } catch (IOException ex) {
+            System.out.println("Image file not found in GameCanvas constructor.");
+        }
     }
 
     @Override 
@@ -134,10 +167,34 @@ public class GameCanvas extends JComponent implements Runnable{
         } else if (playingRunningGame) {
             players[ID].direction = "right";
             runningGame.draw(g2d);
-        } else if (playingMiniGame1) {
-            mg1.draw(g2d);
-        } else if (playingMiniGame2) {
-            mg2.draw(g2d);
+        } else if (playingHoracioQuiz) {
+            horacioQuiz.draw(g2d);
+            if(horacioQuiz.giveGameIndex() == 0){
+                horacioQuiz.gameStart();
+            }
+            else if(horacioQuiz.giveGameIndex() == 1){
+                horacioQuiz.quizGame();
+            }
+            else if(horacioQuiz.giveGameIndex() == 2){
+                horacioQuiz.checked();
+            }  
+            else if(horacioQuiz.giveGameIndex() == 3){
+                horacioQuiz.gameEnd();
+            }  
+        } else if (playingLeongQuiz) {
+            leongQuiz.draw(g2d);
+            if(leongQuiz.giveGameIndex() == 0){
+                leongQuiz.gameStart();
+            }
+            else if(leongQuiz.giveGameIndex() == 1){
+                leongQuiz.quizGame();
+            }
+            else if(leongQuiz.giveGameIndex() == 2){
+                leongQuiz.checked();
+            }  
+            else if(leongQuiz.giveGameIndex() == 3){
+                leongQuiz.gameEnd();
+            }  
         } else if (playingCoinGame) {
             if(coinGame.giveGameIndex() == 0){
                 coinGame.draw(g2d);
@@ -151,6 +208,10 @@ public class GameCanvas extends JComponent implements Runnable{
                 coinGame.draw(g2d);
                 coinGame.gameEnd();
             }  
+        } else if (buildingOccupied) {
+            messageDisplay(g2d, buildingOccupiedText);
+            if (keyH.enterPressed == true)
+                buildingOccupied = false;
         } else {
             tm.draw(g2d);
             if (indexOfMap == 0)
@@ -162,43 +223,74 @@ public class GameCanvas extends JComponent implements Runnable{
             statusBar.draw(g2d);
             g2d.setFont(new Font("SansSerif", Font.BOLD + Font.ITALIC, 35));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Time Remaining: X", 20, 90);
-            g2d.drawString("Buildings: 0/4", 630,90);
+            g2d.drawString("Time Left: ", 20, 90);
+            g2d.drawString(Integer.toString(minutes) + ": ", 200, 90);
+            if (seconds < 10)
+                g2d.drawString("0" + Integer.toString(seconds), 235, 90);
+            else
+                g2d.drawString(Integer.toString(seconds), 235, 90);
+            
+            int doneBuildingsCount = 0;
+            for (boolean x : gameDone){
+                if (x == true)
+                    doneBuildingsCount++;
+            }
+            g2d.drawString("Buildings: " + Integer.toString(doneBuildingsCount) + "/4", 690,90);
 
             players[ID].draw(g2d);
+            players[ID].move();
             
             if (players[ID].getCurrentMap() == players[otherID].getCurrentMap())
                 players[otherID].draw(g2d);
-                
-            this.update();
+        }   
+    }
+
+    public void messageDisplay(Graphics2D g2d, dialogueText dt){
+        g2d.drawImage(buildingOccupiedBackground, 0, 144, 960, 576, null);
+
+        g2d.setColor(Color.decode("#eab676"));
+        g2d.fill(displayText);
+        g2d.draw(displayText);
+
+        g2d.setColor(Color.decode("#154c79"));
+        g2d.fill(tntName);
+        g2d.draw(tntName);
+
+        g2d.setPaint(Color.WHITE);
+        g2d.setFont(new Font("SansSerif", Font.BOLD + Font.ITALIC, 34));
+        g2d.drawString("Rachel", 106, 458);
+        dt.draw(g2d);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent ae){
+        System.out.println("working");
+        seconds--;
+        if (seconds == -1) {
+            minutes--;
+            seconds = 59;
         }
-        
     }
-
-    private void update(){
-        players[ID].move();
-    }
-
-    public void changeIndexOfMap(int i){
-        this.indexOfMap = i;
-    }
-
+    
+    // MODIFIER METHODS
     public void playingRunningGame(boolean tf) { playingRunningGame = tf; }
-    public void playingMiniGame1(boolean tf) { playingMiniGame1 = tf; }
-    public void playingMiniGame2(boolean tf) { playingMiniGame2 = tf; }
+    public void playingHoracioQuiz(boolean tf) { playingHoracioQuiz = tf; }
+    public void playingLeongQuiz(boolean tf) { playingLeongQuiz = tf; }
     public void playingCoinGame(boolean tf) { playingCoinGame = tf; }
     public void inTitleScreen(boolean tf) { inTitleScreen = tf; }
-    public void inOrsem (boolean tf) { inOrsem = tf; }
+    public void inOrsem(boolean tf) { inOrsem = tf; }
+    public void changeBuildingOccupiedStatus(boolean tf) { buildingOccupied = tf; }
+    public void changeIndexOfMap(int i) { this.indexOfMap = i; }
 
-    public int getCurrentMap(){ return (this.indexOfMap); }
+    // ACESSOR METHODS
+    public int getCurrentMap() { return (this.indexOfMap); }
     public KeyHandler getKeyHandlers() { return keyH; }
     public KeyBindings getKeyBindings() { return keyB; }
     public Thread getGameThread() { return gameThread; }
-
-    public Map0 getMap0(){
-        return (map0);
-    }
-    
+    public boolean getLeongStatus() { return otherPlayerIsPlaying0; }
+    public boolean getHoracioStatus() { return otherPlayerIsPlaying1; }
+    public boolean getCTCStatus() { return otherPlayerIsPlaying2; }
+    public boolean getSOMStatus() { return otherPlayerIsPlaying3; }
+    public Timer getTimer() { return timer; }
+    public boolean[] getGameDoneArray() { return gameDone; }
 }
-
-

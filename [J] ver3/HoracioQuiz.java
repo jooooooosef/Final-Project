@@ -9,19 +9,19 @@ public class HoracioQuiz implements DrawingObject {
     Thread gameThread;
     ArrayList<Choice> choices;
     ArrayList<Question> questions;
-    AllCanvas allCanvas;
+    GameCanvas gc;
     HoracioScreen horacioScreen;
     String checked;
     dialogueText start;
     Rectangle2D.Double displayText, tntName;
     int choiceIndex, gameFlowIndex;
 
-    public HoracioQuiz(AllCanvas ac){
-        allCanvas = ac;
-        key = ac.giveKeyHandler();
-        gameThread = ac.giveThread();
-        screenWidth = ac.giveScreenWidth();
-        screenHeight = ac.giveScreenHeight();
+    public HoracioQuiz(GameCanvas gc){
+        this.gc = gc;
+        key = gc.getKeyHandlers();
+        gameThread = gc.getGameThread();
+        screenWidth = gc.screenWidth;
+        screenHeight = gc.screenHeight;
 
         horacioScreen = new HoracioScreen(screenWidth, screenHeight);
 
@@ -40,7 +40,7 @@ public class HoracioQuiz implements DrawingObject {
 
         displayText = new Rectangle2D.Double(80, 435, 800, 250);
         tntName = new Rectangle2D.Double(90, 425, 150, 40);
-        start = new dialogueText("Welcome to InTACT!", "To pass the quiz, get a score of at least 6/10.", "Press A or D to cycle through the questions,", "and Space to submit your answer. Good luck!");
+        start = new dialogueText("Welcome to InTACT!", "To pass the quiz, get a score of at least 6/10.", "Press A or D to cycle through the questions,", "and Enter to submit your answer. Good luck!");
     }
 
     public void draw(Graphics2D g2d){
@@ -65,9 +65,13 @@ public class HoracioQuiz implements DrawingObject {
         }
 
         else if(gameFlowIndex == 1){
+            AffineTransform reset = g2d.getTransform();
+            g2d.translate(0,42);
+            
             if(quizIndex < questions.size()){
                 questions.get(quizIndex).draw(g2d);
             }
+            g2d.setTransform(reset);
             for(int i = 0; i < choices.size(); i++){
                 choices.get(i).draw(g2d);
             }
@@ -108,10 +112,10 @@ public class HoracioQuiz implements DrawingObject {
     }
 
     public void addChoices(){
-        choices.add(new Choice(allCanvas, "a", 85, 450));
-        choices.add(new Choice(allCanvas, "b", 295, 450));
-        choices.add(new Choice(allCanvas, "c", 505, 450));
-        choices.add(new Choice(allCanvas, "d", 715, 450));
+        choices.add(new Choice(gc, "a", 85, 450));
+        choices.add(new Choice(gc, "b", 295, 450));
+        choices.add(new Choice(gc, "c", 505, 450));
+        choices.add(new Choice(gc, "d", 715, 450));
     }
 
     public void addQuestions(){
@@ -132,10 +136,10 @@ public class HoracioQuiz implements DrawingObject {
     public dialogueText results(int s){
         dialogueText result = null;
         if(s >= 6){
-            result = new dialogueText("You scored a total of " + Integer.toString(score) + "/10.", "Congratulations! You win!", "Press the spacebar to return to campus.", "");
+            result = new dialogueText("You scored a total of " + Integer.toString(score) + "/10.", "Congratulations! You win!", "Press enter to return to campus.", "");
         }
         else{
-            result = new dialogueText("You scored a total of only " + Integer.toString(score) + "/10.", "Better luck next time!", "Press the spacebar to return to campus.", "");
+            result = new dialogueText("You scored a total of only " + Integer.toString(score) + "/10.", "Better luck next time!", "Press enter to return to campus.", "");
         }
         return result;
     }
@@ -145,14 +149,14 @@ public class HoracioQuiz implements DrawingObject {
     }
 
     public void gameStart(){
-        if(key.spacePressed){
+        if(key.enterPressed){
             gameFlowIndex++;
             try {
                 gameThread.sleep(100);
             } catch(InterruptedException e){
                 e.printStackTrace();
             }
-            key.spacePressed = false;
+            key.enterPressed = false;
         }
     }
 
@@ -177,14 +181,14 @@ public class HoracioQuiz implements DrawingObject {
                 }
             key.rightPressed = false;
             }
-        else if(key.spacePressed){
+        else if(key.enterPressed){
             gameFlowIndex = 2;
                 try {
                     gameThread.sleep(100);
                 } catch(InterruptedException e){
                     e.printStackTrace();
                 }
-            key.spacePressed = false;
+            key.enterPressed = false;
             }
     }
 
@@ -199,7 +203,7 @@ public class HoracioQuiz implements DrawingObject {
 
     public void checked(){
         check(choices.get(choiceIndex), questions.get(quizIndex));
-        if(key.spacePressed && quizIndex < 11){
+        if(key.enterPressed && quizIndex < 11){
             gameFlowIndex = 1;
             quizIndex++;
             try {
@@ -214,14 +218,15 @@ public class HoracioQuiz implements DrawingObject {
                 gameFlowIndex = 3;
             }
             checked = null;
-            key.spacePressed = false;
+            key.enterPressed = false;
         }
     }
 
-
     public void gameEnd(){
-        if(key.spacePressed){
-            allCanvas.backToMain();
+        if(key.enterPressed){
+            gc.playingHoracioQuiz(false);
+            if (score >= 6)
+                gc.getGameDoneArray()[1] = true;
             try {
                 gameThread.sleep(100);
             } catch(InterruptedException e){
@@ -231,7 +236,7 @@ public class HoracioQuiz implements DrawingObject {
             quizIndex = 0;
             choiceIndex = 0;
             score = 0;
-            key.spacePressed = false;
+            key.enterPressed = false;
         }
     }
 

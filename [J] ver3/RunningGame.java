@@ -69,19 +69,22 @@ public class RunningGame implements DrawingObject, ActionListener{
             } else if (flowIndex == 2) { // LEVEL 1 ACCOMPLISED
                 messageDisplay(g2d, levelOneComplete);
             } else if (flowIndex == 3) { // LEVEL 2
-                startTheRound(g2d, 12);
+                startTheRound(g2d, 15);
             } else if (flowIndex == 4) { // LEVEL 2 ACCOMPLISED
                 messageDisplay(g2d, levelTwoComplete);
             } else if (flowIndex == 5) { // LEVEL 3
-                startTheRound(g2d, 10);
+                startTheRound(g2d, 15);
             } else if (flowIndex == 6) { // LEVEL 3 ACCOMPLISED
                 messageDisplay(g2d, levelThreeComplete);
             } else if (flowIndex == 7) { // LEVEL 4
-                startTheRound(g2d, 9);
+                startTheRound(g2d, 15);
             } else if (flowIndex == 8) { // GAME ACCOMPLISED
                 messageDisplay(g2d, gameComplete);
+                gc.getGameDoneArray()[2] = true;
+                player.setLocation(528,480);
             } else { // GAME LOST
                 messageDisplay(g2d, gameLost);
+                player.setLocation(528,480);
             }
     }
 

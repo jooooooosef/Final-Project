@@ -69,19 +69,31 @@ public class CollisionChecker {
         } 
 
         if((tilePosAfterMovingUp0 == 7) && (keyH.spacePressed == true)){
-            gc.playingRunningGame(true);
+            if (!gc.getHoracioStatus())
+                gc.playingHoracioQuiz(true);
+            else 
+                gc.changeBuildingOccupiedStatus(true);
         }
 
         if((tilePosAfterMovingUp0 == 8) && (keyH.spacePressed == true)){
-            gc.playingMiniGame1(true);
+            if (!gc.getLeongStatus())
+                gc.playingLeongQuiz(true);
+            else 
+                gc.changeBuildingOccupiedStatus(true);
         }
 
         if((tilePosAfterMovingDown0 == 7) && (keyH.spacePressed == true)){
-            gc.playingMiniGame2(true);
+            if (!gc.getCTCStatus())
+                gc.playingRunningGame(true);
+            else 
+                gc.changeBuildingOccupiedStatus(true);
         }
 
         if((tilePosAfterMovingDown0 == 8) && (keyH.spacePressed == true)){
-            gc.playingCoinGame(true);
+            if (!gc.getSOMStatus())
+                gc.playingCoinGame(true);
+            else 
+                gc.changeBuildingOccupiedStatus(true);
         }
 
     }

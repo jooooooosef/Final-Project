@@ -123,11 +123,12 @@ public class CoinGame implements DrawingObject {
 
         if(d >= 60){
             result = new dialogueText("You collected a total of " + Double.toString(score) + " coins.", "Congratulations! You win!", "Press enter to return to campus.", "");
+            gc.getGameDoneArray()[3] = true;
         }
         else{
             result = new dialogueText("You collected a total of only " + Double.toString(score) + " coins.", "Better luck next time!", "Press enter to return to campus.", "");
         }
-        
+        player.setLocation(192,480);
         return result;
     }
 
@@ -155,6 +156,7 @@ public class CoinGame implements DrawingObject {
             gameFlowIndex = 0;
             time = 60;
             player.changePlayerSizeToOriginal();
+            score = 0;
         }
     }
 }

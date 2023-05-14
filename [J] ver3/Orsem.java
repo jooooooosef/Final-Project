@@ -100,6 +100,7 @@ public class Orsem implements DrawingObject {
             }
             else if(dialogueIndex == 6){
                 gc.inOrsem(false);
+                gc.getTimer().start();
                 try {
                     gameThread.sleep(100);
                 } catch(InterruptedException e){
